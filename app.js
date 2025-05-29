@@ -8,6 +8,39 @@ function formatNumber(num) {
   return num ? num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "";
 }
 
+// Format tanggal ke dd-mm-yy
+function formatDate(dateInput) {
+  if (!dateInput) return '';
+  
+  let date;
+  
+  // Jika sudah format string pendek, return as is
+  if (typeof dateInput === 'string' && dateInput.match(/^\d{2}-\d{2}-\d{2}$/)) {
+    return dateInput;
+  }
+  
+  // Jika string tanggal panjang (dari GMT)
+  if (typeof dateInput === 'string') {
+    date = new Date(dateInput);
+  } else if (dateInput instanceof Date) {
+    date = dateInput;
+  } else {
+    return dateInput; // Return as is jika tidak bisa diproses
+  }
+  
+  // Cek jika date valid
+  if (isNaN(date.getTime())) {
+    return dateInput; // Return original jika tidak valid
+  }
+  
+  // Format ke dd-mm-yy
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = String(date.getFullYear()).slice(-2); // Ambil 2 digit terakhir
+  
+  return `${day}-${month}-${year}`;
+}
+
 // Render data ke tabel - DIPERBAIKI untuk format response API yang baru
 function renderTable(data) {
   const table = document.getElementById('dataTable');
@@ -39,7 +72,7 @@ function renderTable(data) {
         return `
           <tr>
             <td>${row.BATCH || row.batch || ''}</td>
-            <td>${row.TANGGAL || row.tanggal || ''}</td>
+            <td>${formatDate(row.TANGGAL || row.tanggal || '')}</td>
             <td>${formatNumber(row.IPL || row.ipl || 0)}</td>
             <td>${formatNumber(row['KAS RT'] || row.kas_rt || 0)}</td>
             <td>${formatNumber(row.TAKZIAH || row.takziah || 0)}</td>
