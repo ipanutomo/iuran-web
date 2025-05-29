@@ -8,9 +8,15 @@ function formatNumber(num) {
   return num ? num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "";
 }
 
-// Render data ke tabel
+// Render data ke tabel - DIPERBAIKI untuk format response API yang baru
 function renderTable(data) {
   const table = document.getElementById('dataTable');
+  
+  if (!data || data.length === 0) {
+    table.innerHTML = '<p>Tidak ada data untuk ditampilkan</p>';
+    return;
+  }
+
   table.innerHTML = `
     <thead>
       <tr>
@@ -26,54 +32,105 @@ function renderTable(data) {
       </tr>
     </thead>
     <tbody>
-      ${data.map(row => `
-        <tr>
-          <td>${row[0] || ''}</td>
-          <td>${row[1] || ''}</td>
-          <td>${formatNumber(row[2])}</td>
-          <td>${formatNumber(row[3])}</td>
-          <td>${formatNumber(row[4])}</td>
-          <td>${formatNumber(row[5])}</td>
-          <td>${formatNumber(row[7])}</td>
-          <td>${formatNumber(row[8])}</td>
-          <td class="total">${formatNumber((row[6] || 0) + (row[7] || 0) + (row[8] || 0)}</td>
-        </tr>
-      `).join('')}
+      ${data.map(row => {
+        // PERBAIKAN: Sekarang row adalah object, bukan array
+        console.log('Processing row:', row); // Debug setiap row
+        
+        return `
+          <tr>
+            <td>${row.BATCH || row.batch || ''}</td>
+            <td>${row.TANGGAL || row.tanggal || ''}</td>
+            <td>${formatNumber(row.IPL || row.ipl || 0)}</td>
+            <td>${formatNumber(row['KAS RT'] || row.kas_rt || 0)}</td>
+            <td>${formatNumber(row.TAKZIAH || row.takziah || 0)}</td>
+            <td>${formatNumber(row['LAIN-LAIN'] || row.lain_lain || 0)}</td>
+            <td>${formatNumber(row['KAS GANG'] || row.kas_gang || 0)}</td>
+            <td>${formatNumber(row.DENDA || row.denda || 0)}</td>
+            <td class="total">${formatNumber(
+              (row.IPL || row.ipl || 0) + 
+              (row['KAS RT'] || row.kas_rt || 0) + 
+              (row.TAKZIAH || row.takziah || 0) + 
+              (row['LAIN-LAIN'] || row.lain_lain || 0) + 
+              (row['KAS GANG'] || row.kas_gang || 0) + 
+              (row.DENDA || row.denda || 0)
+            )}</td>
+          </tr>
+        `;
+      }).join('')}
     </tbody>
   `;
 }
 
-// Load data dari Google Apps Script
+// Load data dari Google Apps Script - DIPERBAIKI
 async function loadData() {
   const loadingElement = document.getElementById('loading');
   const errorElement = document.getElementById('error');
   
   try {
     loadingElement.textContent = "Memuat data...";
+    loadingElement.style.display = 'block';
     errorElement.textContent = "";
+    errorElement.style.display = 'none';
 
-    // Tambahkan timestamp untuk avoid cache
-    const url = `${CONFIG.WEB_APP_URL}?t=${Date.now()}`;
-    console.log("Fetching from:", url); // Debugging
+    // PERBAIKAN: Tambahkan endpoint=data dan timestamp
+    const url = `${CONFIG.WEB_APP_URL}?endpoint=data&t=${Date.now()}`;
+    console.log("Fetching from:", url);
     
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+      }
+    });
     
-    // Cek jika response bukan JSON
-    const contentType = response.headers.get('content-type');
-    if (!contentType.includes('application/json')) {
-      const text = await response.text();
-      throw new Error(`Response bukan JSON: ${text.substring(0, 100)}...`);
+    console.log("Response status:", response.status);
+    console.log("Response headers:", [...response.headers.entries()]);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
     
-    const data = await response.json();
-    console.log("Data received:", data); // Debugging
+    // PERBAIKAN: Cek content-type dengan lebih toleran
+    const contentType = response.headers.get('content-type') || '';
+    console.log("Content-Type:", contentType);
     
-    if (!data || data.error) {
-      throw new Error(data?.error || "Data kosong");
+    const responseText = await response.text();
+    console.log("Raw response:", responseText.substring(0, 500)); // Log partial response
+    
+    let data;
+    try {
+      data = JSON.parse(responseText);
+    } catch (parseError) {
+      console.error("JSON Parse Error:", parseError);
+      throw new Error(`Response bukan JSON valid: ${responseText.substring(0, 200)}...`);
     }
-
-    loadingElement.style.display = 'none';
-    renderTable(data.data || data);
+    
+    console.log("Parsed data:", data);
+    
+    // PERBAIKAN: Handle response format dari API yang baru
+    if (data.status === 'error') {
+      throw new Error(data.error.message || 'API mengembalikan error');
+    }
+    
+    if (data.status === 'success') {
+      const tableData = data.data || [];
+      console.log("Table data:", tableData);
+      
+      if (tableData.length === 0) {
+        throw new Error('Tidak ada data dari spreadsheet');
+      }
+      
+      loadingElement.style.display = 'none';
+      renderTable(tableData);
+      
+      // Show metadata if available
+      if (data.metadata) {
+        console.log("Metadata:", data.metadata);
+      }
+      
+    } else {
+      throw new Error('Format response tidak dikenali');
+    }
     
   } catch (error) {
     console.error("Error details:", error);
@@ -83,13 +140,42 @@ async function loadData() {
   }
 }
 
+// Test function untuk debugging
+async function testAPI() {
+  try {
+    const testUrl = `${CONFIG.WEB_APP_URL}?endpoint=test&t=${Date.now()}`;
+    console.log("Testing API:", testUrl);
+    
+    const response = await fetch(testUrl);
+    const data = await response.json();
+    
+    console.log("Test API response:", data);
+    
+    if (data.status === 'success') {
+      console.log("✅ API berfungsi normal");
+    } else {
+      console.log("❌ API error:", data);
+    }
+  } catch (error) {
+    console.error("❌ Test API gagal:", error);
+  }
+}
+
 // Inisialisasi
 document.addEventListener('DOMContentLoaded', () => {
-  // Toggle sidebar di mobile
-  document.querySelector('.menu-toggle').addEventListener('click', () => {
-    document.body.classList.toggle('sidebar-open');
-  });
-
+  // Toggle sidebar di mobile (jika ada)
+  const menuToggle = document.querySelector('.menu-toggle');
+  if (menuToggle) {
+    menuToggle.addEventListener('click', () => {
+      document.body.classList.toggle('sidebar-open');
+    });
+  }
+  
+  // Test API terlebih dahulu
+  testAPI();
+  
   // Load data awal
-  loadData();
+  setTimeout(() => {
+    loadData();
+  }, 1000); // Delay 1 detik untuk memastikan test selesai
 });
