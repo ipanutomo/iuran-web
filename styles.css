@@ -1,0 +1,158 @@
+        <style>
+          body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f6f8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            transition: margin-left 0.3s;
+          }
+          
+          /* Sidebar Styles */
+          .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            padding-top: 80px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            z-index: 1;
+          }
+          
+          .sidebar a {
+            display: block;
+            color: white;
+            padding: 15px 25px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+          }
+          
+          .sidebar a:hover {
+            background: rgba(255,255,255,0.1);
+            border-left: 4px solid #f1c40f;
+            transform: translateX(5px);
+          }
+          
+          /* Header Styles */
+          .header {
+            background-color: #2c3e50;
+            padding: 20px 30px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 250px;
+            right: 0;
+            z-index: 2;
+            transition: left 0.3s;
+          }
+          
+          /* Main Content Styles */
+          .container {
+            max-width: 1200px;
+            margin: 140px auto 30px auto;
+            padding: 0 20px;
+            margin-left: 270px;
+            transition: margin-left 0.3s;
+          }
+          
+          h1 {
+            font-size: 28px;
+            margin: 0;
+          }
+          
+          .table-wrapper {
+            max-height: calc(100vh - 160px);
+            overflow-y: auto;
+            position: relative;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+          }
+          
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+          }
+          
+          th, td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid #ddd;
+          }
+          
+          thead {
+            background-color: #34495e;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+          }
+          
+          tr:nth-child(even) {
+            background-color: #f9f9f9;
+          }
+          
+          tr:hover {
+            background-color: #ecf0f1;
+          }
+          
+          .error {
+            color: red;
+            font-size: 16px;
+            text-align: center;
+            margin-top: 20px;
+          }
+          
+          .total-column {
+            font-weight: bold;
+          }
+          
+          /* Mobile responsiveness */
+          @media (max-width: 768px) {
+            .sidebar {
+              width: 0;
+              padding-top: 60px;
+            }
+            
+            .header {
+              left: 0;
+            }
+            
+            .container {
+              margin-left: 20px;
+              margin-top: 100px;
+            }
+            
+            .menu-toggle {
+              display: block;
+              position: fixed;
+              top: 15px;
+              left: 15px;
+              z-index: 3;
+              background: #34495e;
+              color: white;
+              border: none;
+              padding: 10px;
+              border-radius: 4px;
+              cursor: pointer;
+            }
+            
+            body.sidebar-open .sidebar {
+              width: 250px;
+            }
+            
+            body.sidebar-open .header {
+              left: 250px;
+            }
+            
+            body.sidebar-open .container {
+              margin-left: 270px;
+            }
+          }
+        </style>
