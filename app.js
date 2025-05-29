@@ -45,19 +45,41 @@ function renderTable(data) {
 
 // Load data dari Google Apps Script
 async function loadData() {
+  const loadingElement = document.getElementById('loading');
+  const errorElement = document.getElementById('error');
+  
   try {
-    const response = await fetch(CONFIG.WEB_APP_URL);
+    loadingElement.textContent = "Memuat data...";
+    errorElement.textContent = "";
+
+    // Tambahkan timestamp untuk avoid cache
+    const url = `${CONFIG.WEB_APP_URL}?t=${Date.now()}`;
+    console.log("Fetching from:", url); // Debugging
+    
+    const response = await fetch(url);
+    
+    // Cek jika response bukan JSON
+    const contentType = response.headers.get('content-type');
+    if (!contentType.includes('application/json')) {
+      const text = await response.text();
+      throw new Error(`Response bukan JSON: ${text.substring(0, 100)}...`);
+    }
+    
     const data = await response.json();
+    console.log("Data received:", data); // Debugging
     
-    if (data.error) throw new Error(data.error);
-    
-    document.getElementById('loading').style.display = 'none';
+    if (!data || data.error) {
+      throw new Error(data?.error || "Data kosong");
+    }
+
+    loadingElement.style.display = 'none';
     renderTable(data.data || data);
     
   } catch (error) {
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('error').textContent = `Error: ${error.message}`;
-    console.error('Gagal memuat data:', error);
+    console.error("Error details:", error);
+    loadingElement.style.display = 'none';
+    errorElement.textContent = `Gagal memuat data: ${error.message}`;
+    errorElement.style.display = 'block';
   }
 }
 
