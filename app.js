@@ -74,7 +74,7 @@ function renderTable(data) {
             <td>${row.BATCH || row.batch || ''}</td>
             <td>${formatDate(row.TANGGAL || row.tanggal || '')}</td>
             <td>${formatNumber(row.IPL || row.ipl || 0)}</td>
-            <td>${formatNumber(row['KAS RT'] || row.rt || 0)}</td>
+            <td>${formatNumber(row['RT'] || row.rt || 0)}</td>
             <td>${formatNumber(row.TAKZIAH || row.takziah || 0)}</td>
             <td>${formatNumber(row['LAIN-LAIN'] || row.lainnya || 0)}</td>
             <td>${formatNumber(row['KAS GANG'] || row.kas_gang || 0)}</td>
