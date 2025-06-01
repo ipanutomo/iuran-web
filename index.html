@@ -3,36 +3,84 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Batch Iuran Jeruk 2</title>
+  <title>Batch Iuran Jeruk 2 | Sistem Manajemen Iuran</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <a href="https://lookerstudio.google.com/reporting/82060d91-404a-4bb0-9f2b-d83bf3712377" target="_blank">
-      <i class="icon">📊</i> Dashboard Iuran
-    </a>
-    <a href="https://lookerstudio.google.com/reporting/58d8c581-7b7a-42c4-942f-d7cf7d3e907c" target="_blank">
-      <i class="icon">💰</i> Dashboard Kas Gang
-    </a>
-  </div>
-
-  <!-- Main Content -->
-  <div class="main-content">
-    <header>
-      <button class="menu-toggle">☰</button>
-      <h1>Batch Iuran Jeruk 2</h1>
-    </header>
-
-    <div class="container">
-      <div id="loading">Memuat data...</div>
-      <div id="error" class="error"></div>
-      <div class="table-wrapper">
-        <table id="dataTable">
-          <!-- Data akan diisi oleh JavaScript -->
-        </table>
+  <!-- Navigation Wrapper -->
+  <div class="app-container">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <h2>Jeruk 2</h2>
+        <p>Sistem Manajemen Iuran</p>
       </div>
-    </div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="https://lookerstudio.google.com/reporting/82060d91-404a-4bb0-9f2b-d83bf3712377" target="_blank" class="menu-item">
+            <i class="fas fa-chart-line icon"></i>
+            <span>Dashboard Iuran</span>
+          </a>
+        </li>
+        <li>
+          <a href="https://lookerstudio.google.com/reporting/58d8c581-7b7a-42c4-942f-d7cf7d3e907c" target="_blank" class="menu-item">
+            <i class="fas fa-wallet icon"></i>
+            <span>Dashboard Kas Gang</span>
+          </a>
+        </li>
+      </ul>
+      <div class="sidebar-footer">
+        <p>© 2023 Batch Jeruk 2</p>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Navigation -->
+      <header class="top-nav">
+        <div class="nav-left">
+          <button class="menu-toggle">
+            <i class="fas fa-bars"></i>
+          </button>
+          <h1>Batch Iuran Jeruk 2</h1>
+        </div>
+        <div class="nav-right">
+          <div class="status-indicator">
+            <i class="fas fa-circle online"></i>
+            <span>Sistem Aktif</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Content Area -->
+      <div class="content-area">
+        <div class="content-header">
+          <h2>Data Iuran Warga</h2>
+          <div class="actions">
+            <button class="btn refresh-btn">
+              <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <div id="loading" class="loading-state">
+              <i class="fas fa-spinner fa-spin"></i>
+              <span>Memuat data...</span>
+            </div>
+            <div id="error" class="error-state"></div>
+            
+            <div class="table-responsive">
+              <table id="dataTable" class="modern-table">
+                <!-- Data akan diisi oleh JavaScript -->
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
   </div>
 
   <script src="app.js"></script>
