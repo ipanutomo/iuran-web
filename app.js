@@ -196,6 +196,11 @@ async function testAPI() {
 
 // Inisialisasi
 document.addEventListener('DOMContentLoaded', () => {
+  // Toggle sidebar di mobile
+  document.querySelector('.menu-toggle').addEventListener('click', function() {
+  document.querySelector('.sidebar').classList.toggle('active');
+  document.querySelector('.main-content').classList.toggle('sidebar-active');
+});
   // Toggle sidebar di mobile (jika ada)
   const menuToggle = document.querySelector('.menu-toggle');
   if (menuToggle) {
