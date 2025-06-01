@@ -179,19 +179,11 @@ body {
 /* Table Styles */
 .table-responsive {
   overflow-x: auto;
-  max-height: calc(100vh - 200px);
-  position: relative;
 }
 
 .modern-table {
   width: 100%;
   border-collapse: collapse;
-}
-
-.modern-table thead {
-  position: sticky;
-  top: 60px;
-  z-index: 10;
 }
 
 .modern-table th {
@@ -201,9 +193,6 @@ body {
   font-weight: 600;
   color: #2c3e50;
   border-bottom: 2px solid #e9ecef;
-  position: sticky;
-  top: 60px;
-  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
 }
 
 .modern-table td {
@@ -253,14 +242,10 @@ body {
 
   .sidebar.active {
     transform: translateX(0);
-    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
   }
-  
-  .main-content.sidebar-active {
-    margin-left: 250px;
-    overflow: hidden;
-    position: fixed;
-    width: 100%;
+
+  .main-content {
+    margin-left: 0;
   }
 
   .menu-toggle {
@@ -280,13 +265,17 @@ body {
   .btn {
     width: 100%;
   }
-
-  /* Adjust sticky header for mobile */
-  .modern-table thead {
-    top: 50px; /* Sesuaikan dengan tinggi header mobile */
+}
+@media (max-width: 768px) {
+  .sidebar.active {
+    transform: translateX(0);
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
   }
-
-  .modern-table th {
-    top: 50px;
+  
+  .main-content.sidebar-active {
+    margin-left: 250px;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
   }
 }
