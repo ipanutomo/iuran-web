@@ -76,12 +76,12 @@ function renderTable(data) {
             <td>${formatNumber(row.IPL || row.ipl || 0)}</td>
             <td>${formatNumber(row['RT'] || row.rt || 0)}</td>
             <td>${formatNumber(row.TAKZIAH || row.takziah || 0)}</td>
-            <td>${formatNumber(row['LAIN-LAIN'] || row.lainnya || 0)}</td>
+            <td>${formatNumber(row['LAINNYA'] || row.lainnya || 0)}</td>
             <td>${formatNumber(row['KAS GANG'] || row.kas_gang || 0)}</td>
             <td>${formatNumber(row.DENDA || row.denda || 0)}</td>
             <td class="total">${formatNumber(
               (row.IPL || row.ipl || 0) + 
-              (row['KAS RT'] || row.kas_rt || 0) + 
+              (row['RT'] || row.rt || 0) + 
               (row.TAKZIAH || row.takziah || 0) + 
               (row['LAIN-LAIN'] || row.lain_lain || 0) + 
               (row['KAS GANG'] || row.kas_gang || 0) + 
