@@ -1,7 +1,6 @@
 // Konfigurasi Aplikasi
-  //WEB_APP_URL: "https://script.google.com/macros/s/AKfycbx_BZ5MQOIuPLPaPY0OZ5A9rE3xOGeeSzBb-r8-cig0e52d0E5m6VWghG-KDV5XrwOL/exec"
 const CONFIG = {
-  WEB_APP_URL: "https://script.google.com/macros/s/AKfycbxgcqQxC8vyArbmvxoLwYRmdrIywtg_eAe9rhCQopZbcQ5R5pva61HS7K-vCZ4CFzcz/exec"
+  WEB_APP_URL: "https://script.google.com/macros/s/AKfycbx_BZ5MQOIuPLPaPY0OZ5A9rE3xOGeeSzBb-r8-cig0e52d0E5m6VWghG-KDV5XrwOL/exec"
 };
 
 // Format angka dengan separator
